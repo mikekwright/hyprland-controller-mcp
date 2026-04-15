@@ -1,0 +1,30 @@
+id: handle-no-active-monitor-or-monitor-inspection-unavailable
+name: Handle no active monitor or unavailable monitor inspection
+goal: >
+  Verify that the screenshot tool responds clearly when there is no active monitor,
+  or when monitor inspection cannot determine an active monitor for default capture.
+preconditions:
+  - Host platform is Linux.
+  - MCP server can be started locally for validation.
+  - Validator can reproduce a condition with no active monitor or with monitor inspection unavailable for determining the active monitor.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner.
+  - id: establish-no-active-monitor-condition
+    action: Prepare or select a runtime condition in which no active monitor can be determined, or monitor inspection is unavailable for that determination.
+  - id: invoke-default-capture
+    action: Invoke the screenshot tool without an explicit monitor selector so it must resolve a default target.
+  - id: review-response
+    action: Save the response and confirm whether the tool returns a fallback capture result or a clear no-active-monitor style error.
+artifacts:
+  screenshots:
+    - no-active-monitor-fallback-capture-if-produced
+  recordings: []
+  logs:
+    - no-active-monitor-condition-record
+    - no-active-monitor-response
+assertions:
+  - The tool does not crash or hang when no active monitor can be determined.
+  - The response clearly distinguishes this condition from generic internal failure.
+  - If a screenshot artifact is produced, the response explains the fallback target that was used.
+  - If no artifact is produced, the error clearly indicates that no active monitor could be resolved or inspected.

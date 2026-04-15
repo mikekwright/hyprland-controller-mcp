@@ -1,0 +1,27 @@
+id: reject-invalid-monitor-selector
+name: Reject invalid monitor selector
+goal: >
+  Verify that the screenshot tool rejects a monitor selector that does not map to any
+  monitor in the current runtime environment.
+preconditions:
+  - MCP server can be started locally for validation.
+  - If runtime monitor inspection is available, validator can confirm the supplied selector is not present.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner.
+  - id: choose-invalid-selector
+    action: Choose a clearly invalid monitor selector that is not present in the runtime environment.
+  - id: invoke-invalid-monitor-request
+    action: Invoke the screenshot tool with a full-monitor or region capture request using the invalid selector.
+  - id: review-error
+    action: Save the response and confirm the failure is a client-facing validation error rather than a crash or generic internal failure.
+artifacts:
+  screenshots: []
+  recordings: []
+  logs:
+    - invalid-monitor-selector-response
+assertions:
+  - Unknown monitor selectors are rejected.
+  - The failure message clearly indicates that the requested monitor selector could not be resolved.
+  - The tool does not silently fall back to a different monitor when the request explicitly targets an invalid selector.
+  - No screenshot artifact is produced for the invalid monitor selector request.

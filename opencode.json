@@ -26,17 +26,46 @@
       "tools": {
         "bash": false
       },
-      "prompt": "Create and update structured specs under specs/. You may read project docs and source material needed to prepare specs, but do not modify implementation files. Do not read or write validation artifacts under scenarios/. Do not run validation."
+      "prompt": "Create and update structured specs under specs/. You may read project docs and source material needed to prepare specs, but do not modify implementation files. Do not read or write validation artifacts under scenarios/. Do not run validation.",
+      "permissions": {
+        "external_directory": {
+          "*": "allow",
+          "scenarios/": "deny"
+        },
+        "edit": {
+          "*": "deny",
+          "specs/": "allow"
+        }
+      }
     },
     "spec-implementor": {
       "description": "Implements approved specs in project code.",
       "mode": "subagent",
-      "prompt": "Implement approved specs in the project code. Treat specs/ as read-only reference material. Do not read from or write to scenarios/. Focus changes on source, tests, docs, scripts, and examples as needed."
+      "prompt": "Implement approved specs in the project code. Treat specs/ as read-only reference material. Do not read from or write to scenarios/. Focus changes on source, tests, docs, scripts, and examples as needed.",
+      "permissions": {
+        "external_directory": {
+          "*": "allow",
+          "scenarios/": "deny"
+        },
+        "edit": {
+          "*": "allow",
+          "scenarios/": "deny"
+        }
+      }
     },
     "scenario-validator": {
       "description": "Runs scenarios and stores validation artifacts without reading implementation code.",
       "mode": "subagent",
-      "prompt": "Run scenarios and store validation artifacts under scenarios/. Operate only on runtime and validation inputs such as scenario files and validation scripts. Do not read or modify src/, tests/, or specs/. Validation artifacts are not source code."
+      "prompt": "Run scenarios and store validation artifacts under scenarios/. Operate only on runtime and validation inputs such as scenario files and validation scripts. Do not read or modify src/, tests/, or specs/. Validation artifacts are not source code.",
+      "permissions": {
+        "external_directory": {
+          "*": "allow"
+        },
+        "edit": {
+          "*": "deny",
+          "scenarios/": "allow"
+        }
+      }
     }
   },
   "command": {

@@ -1,0 +1,32 @@
+id: reject-out-of-bounds-monitor-local-region
+name: Reject out-of-bounds monitor-local region
+goal: >
+  Verify that the screenshot tool rejects a monitor-local region that extends beyond
+  the bounds of an otherwise valid selected monitor.
+preconditions:
+  - Host platform is Linux.
+  - A running Hyprland session is available.
+  - MCP server can be started locally for validation.
+  - Runtime monitor inspection is available for choosing a real monitor and its geometry.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner.
+  - id: inspect-monitors
+    action: Enumerate active monitors and choose one valid monitor selector with known width and height.
+  - id: build-invalid-region
+    action: Construct a monitor-local region whose coordinates or size extend beyond the selected monitor bounds.
+  - id: invoke-out-of-bounds-request
+    action: Invoke the screenshot tool with the valid monitor selector and the out-of-bounds region.
+  - id: review-error
+    action: Save the response and confirm the failure is a validation error rather than a crash, hang, or ambiguous internal failure.
+artifacts:
+  screenshots: []
+  recordings: []
+  logs:
+    - monitor-inspection-output
+    - out-of-bounds-monitor-local-region-response
+assertions:
+  - Out-of-bounds monitor-local region requests are rejected.
+  - The failure message clearly indicates that the requested region exceeds the selected monitor bounds.
+  - The validation failure preserves the distinction between an invalid region and an invalid monitor selector.
+  - No screenshot artifact is produced for the out-of-bounds request.

@@ -1,0 +1,33 @@
+id: capture-combined-desktop-across-monitors
+name: Capture the combined desktop across active monitors
+goal: >
+  Verify that the screenshot tool can produce a whole-desktop image spanning the
+  current multi-monitor layout when combined capture behavior is requested.
+preconditions:
+  - Host platform is Linux.
+  - A running Hyprland session is available.
+  - MCP server can be started locally for validation.
+  - More than one active monitor is preferred so combined-desktop capture can be distinguished from single-monitor capture.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner.
+  - id: inspect-layout
+    action: Record the runtime monitor layout, including total desktop extents across all active monitors.
+  - id: invoke-combined-capture
+    action: Invoke the screenshot tool using the request shape intended to capture the combined desktop across active monitors.
+  - id: store-response
+    action: Save the tool response and any metadata that describes the capture target or selection mode.
+  - id: verify-image
+    action: Confirm the returned screenshot artifact exists and compare its dimensions with the combined desktop layout.
+artifacts:
+  screenshots:
+    - combined-desktop-capture
+  recordings: []
+  logs:
+    - desktop-layout-inspection-output
+    - combined-desktop-capture-response
+assertions:
+  - Screenshot tool invocation succeeds and returns a screenshot artifact.
+  - The response indicates combined-desktop, whole-layout, or equivalent multi-monitor capture behavior.
+  - The produced image dimensions are consistent with the full desktop extents across active monitors, allowing for documented scaling differences.
+  - The artifact is not empty and is reviewable by a human validator.

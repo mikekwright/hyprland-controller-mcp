@@ -1,0 +1,32 @@
+id: fallback-when-monitor-targeting-unavailable
+name: Fall back when monitor targeting or inspection is unavailable
+goal: >
+  Verify that the screenshot tool returns a useful result or a clear degraded-mode
+  response when explicit monitor targeting or monitor inspection cannot be used.
+preconditions:
+  - Host platform is Linux.
+  - MCP server can be started locally for validation.
+  - Validator can induce or select a runtime condition in which monitor targeting or monitor inspection is unavailable.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner.
+  - id: establish-unavailable-targeting-condition
+    action: Prepare a runtime condition in which monitor targeting or monitor inspection is unavailable to the screenshot workflow.
+  - id: invoke-capture
+    action: Invoke the screenshot tool with a request that would normally rely on monitor targeting or inspection.
+  - id: store-response
+    action: Save the tool response and any metadata describing whether fallback behavior or a degraded-mode error was used.
+  - id: review-result
+    action: Confirm whether a screenshot artifact was produced or a clear non-ambiguous fallback error was returned.
+artifacts:
+  screenshots:
+    - fallback-capture-if-produced
+  recordings: []
+  logs:
+    - monitor-targeting-unavailable-setup
+    - fallback-monitor-targeting-response
+assertions:
+  - The tool does not crash or hang when monitor targeting or inspection is unavailable.
+  - The response clearly communicates whether fallback capture succeeded or why it could not proceed.
+  - If a screenshot artifact is produced, it represents a useful fallback result rather than a corrupt or empty image.
+  - If no artifact is produced, the failure is explicit and reviewable rather than silent or misleading.

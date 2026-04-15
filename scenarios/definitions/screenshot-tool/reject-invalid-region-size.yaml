@@ -1,0 +1,28 @@
+id: reject-invalid-region-size
+name: Reject invalid screenshot region sizes
+goal: >
+  Verify that the screenshot tool rejects region requests with invalid size values,
+  including zero-sized and negative width or height.
+preconditions:
+  - MCP server can be started locally for validation.
+  - Validator can capture and retain individual error responses as logs.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner.
+  - id: invoke-zero-sized-region
+    action: Invoke the screenshot tool with a region request whose width or height is zero.
+  - id: invoke-negative-sized-region
+    action: Invoke the screenshot tool with a region request whose width or height is negative.
+  - id: review-errors
+    action: Save each response and confirm the failures are validation errors rather than crashes, hangs, or ambiguous internal failures.
+artifacts:
+  screenshots: []
+  recordings: []
+  logs:
+    - invalid-zero-sized-region-response
+    - invalid-negative-sized-region-response
+assertions:
+  - Zero-sized region requests are rejected.
+  - Negative-sized region requests are rejected.
+  - Each failure returns a clear client-facing validation message that identifies the invalid size field or condition.
+  - Invalid size requests do not produce screenshot artifacts.

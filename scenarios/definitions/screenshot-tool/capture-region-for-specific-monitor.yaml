@@ -1,0 +1,32 @@
+id: capture-region-for-specific-monitor
+name: Capture a region from a specific monitor
+goal: Verify that the screenshot tool can crop a monitor-local region from a selected monitor and return an image for only that region.
+preconditions:
+  - Host platform is Linux.
+  - A running Hyprland session is available.
+  - MCP server can be started locally for validation.
+  - At least one active monitor is available with known geometry.
+  - A safe test region can be chosen fully inside one monitor's bounds.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner.
+  - id: inspect-monitors
+    action: Enumerate active monitors and choose one valid monitor selector plus a small rectangular region that stays fully within that monitor.
+  - id: invoke-region-capture
+    action: Invoke the screenshot tool with the selected monitor and the chosen monitor-local region coordinates.
+  - id: record-request-metadata
+    action: Save the requested region values and the tool response for comparison during review.
+  - id: verify-image
+    action: Confirm the screenshot artifact exists and compare its dimensions to the requested crop size.
+artifacts:
+  screenshots:
+    - monitor-region-capture
+  recordings: []
+  logs:
+    - monitor-inspection-output
+    - region-capture-request-and-response
+assertions:
+  - Screenshot tool invocation succeeds for a valid monitor-local region request.
+  - The screenshot artifact exists and is readable as an image.
+  - The image dimensions match the requested region width and height, or any deviation is explicitly explained by the tool response.
+  - The returned image is smaller than the full selected monitor capture, showing that cropping was applied.

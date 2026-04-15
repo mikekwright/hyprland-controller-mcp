@@ -1,0 +1,31 @@
+id: capture-default-monitor-on-hyprland
+name: Capture screenshot from the default monitor on Hyprland
+goal: Verify that the screenshot tool can capture a full-screen image from the default or focused monitor in a running Hyprland session.
+preconditions:
+  - Host platform is Linux.
+  - A running Hyprland session is available.
+  - MCP server can be started locally for validation.
+  - At least one monitor is active in the current session.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner.
+  - id: inspect-monitors
+    action: Collect current monitor details using validator-safe runtime inspection so the active display layout is known before capture.
+  - id: invoke-default-capture
+    action: Invoke the screenshot tool without an explicit monitor selector so it uses its default monitor selection behavior.
+  - id: store-response
+    action: Save the tool response and any reported output path or metadata for later review.
+  - id: verify-image
+    action: Confirm the returned screenshot file exists and can be opened as an image artifact.
+artifacts:
+  screenshots:
+    - default-monitor-capture
+  recordings: []
+  logs:
+    - monitor-inspection-output
+    - default-capture-tool-response
+assertions:
+  - Screenshot tool invocation succeeds on Linux under Hyprland.
+  - Exactly one screenshot artifact is produced for the default capture request.
+  - The response identifies a concrete artifact path or payload that maps to the stored screenshot.
+  - The captured image has non-zero dimensions and is consistent with one active monitor rather than an empty or corrupt image.

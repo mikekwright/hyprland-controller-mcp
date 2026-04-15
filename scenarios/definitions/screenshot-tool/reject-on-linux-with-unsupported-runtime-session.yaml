@@ -1,0 +1,28 @@
+id: reject-on-linux-with-unsupported-runtime-session
+name: Reject screenshot capture on Linux with unsupported runtime or session
+goal: >
+  Verify that the screenshot tool returns a clear unsupported-runtime or unsupported-session
+  error on Linux when the required session or compositor conditions are not met.
+preconditions:
+  - Host platform is Linux.
+  - MCP server can be started locally for validation.
+  - Validator can run the server in a Linux runtime or session that does not satisfy the screenshot tool requirements.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner under the unsupported Linux runtime or session.
+  - id: list-tools
+    action: Request the server tool list.
+  - id: invoke-screenshot
+    action: Invoke the screenshot tool with a whole-screen capture request.
+  - id: verify-error
+    action: Save the response and confirm the invocation fails with a clear unsupported-runtime or unsupported-session error.
+artifacts:
+  screenshots: []
+  recordings: []
+  logs:
+    - tool-list-response
+    - unsupported-runtime-session-error-response
+assertions:
+  - Screenshot tool behavior is deterministic on Linux when the required runtime or session is unavailable.
+  - The failure message clearly identifies the runtime, session, or compositor precondition that is not met.
+  - The tool does not return a misleading success response or produce a screenshot artifact under an unsupported runtime or session.

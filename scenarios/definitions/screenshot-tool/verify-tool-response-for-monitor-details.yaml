@@ -1,0 +1,31 @@
+id: verify-tool-response-for-monitor-details
+name: Verify screenshot tool response includes monitor details
+goal: Verify that screenshot-related responses provide enough monitor detail for a validator to understand which display was captured and how the request was resolved.
+preconditions:
+  - Host platform is Linux.
+  - A running Hyprland session is available.
+  - MCP server can be started locally for validation.
+  - Runtime monitor inspection is available through validator-safe commands.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner.
+  - id: inspect-monitors
+    action: Record the current monitor list and geometry from the runtime environment as the external reference.
+  - id: invoke-screenshot
+    action: Invoke the screenshot tool with a valid capture request that should resolve to one monitor or to the combined desktop.
+  - id: capture-response
+    action: Save the full tool response, including any structured fields that describe monitor name, geometry, selection mode, or output path.
+  - id: compare-details
+    action: Compare the response details with the runtime monitor inspection output for consistency.
+artifacts:
+  screenshots:
+    - response-verification-capture
+  recordings: []
+  logs:
+    - runtime-monitor-details
+    - screenshot-tool-structured-response
+assertions:
+  - Screenshot tool invocation succeeds for the chosen capture request.
+  - The response includes enough detail for a validator to identify the capture target or selection mode.
+  - Any reported monitor name, identifier, or geometry is consistent with runtime monitor inspection output.
+  - The response includes a concrete artifact reference such as a file path, payload field, or manifest entry.

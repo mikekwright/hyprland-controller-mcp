@@ -1,0 +1,31 @@
+id: capture-specific-monitor-on-hyprland
+name: Capture screenshot from a specific monitor on Hyprland
+goal: Verify that the screenshot tool can target a named or indexed monitor and capture only that monitor's content.
+preconditions:
+  - Host platform is Linux.
+  - A running Hyprland session is available.
+  - MCP server can be started locally for validation.
+  - At least two active monitors are preferred so a specific-monitor capture can be distinguished from a whole-desktop capture.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner.
+  - id: inspect-monitors
+    action: Enumerate active monitors and choose one concrete monitor selector that the runtime clearly reports as valid.
+  - id: invoke-specific-capture
+    action: Invoke the screenshot tool with the chosen monitor selector for a full-monitor capture request.
+  - id: collect-reference-layout
+    action: Record monitor geometry from the runtime inspection output so the returned image can be compared to the selected monitor only.
+  - id: verify-image
+    action: Confirm the screenshot artifact exists and review its dimensions against the selected monitor geometry.
+artifacts:
+  screenshots:
+    - selected-monitor-capture
+  recordings: []
+  logs:
+    - monitor-enumeration-output
+    - specific-monitor-capture-response
+assertions:
+  - Screenshot tool invocation succeeds for a valid monitor selector.
+  - The response indicates the requested monitor was used rather than a default or combined-desktop fallback.
+  - The screenshot artifact has non-zero dimensions.
+  - The image dimensions are consistent with the selected monitor's reported geometry, allowing for documented scaling or pixel-density differences.

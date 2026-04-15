@@ -1,0 +1,27 @@
+id: fail-when-screenshot-dependency-unavailable
+name: Fail clearly when screenshot dependency is unavailable
+goal: >
+  Verify that the screenshot tool returns a clear operational error when a required
+  screenshot dependency is unavailable or cannot be executed.
+preconditions:
+  - Host platform is Linux.
+  - MCP server can be started locally for validation.
+  - Validator can reproduce a condition in which the screenshot dependency used by the tool is unavailable or not executable.
+steps:
+  - id: start-server
+    action: Start the MCP server through the approved validator runner under a condition where the screenshot dependency is unavailable.
+  - id: invoke-screenshot
+    action: Invoke the screenshot tool with a valid capture request.
+  - id: review-error
+    action: Save the response and confirm the failure identifies the unavailable dependency rather than returning an ambiguous internal error.
+artifacts:
+  screenshots: []
+  recordings: []
+  logs:
+    - screenshot-dependency-unavailable-condition
+    - screenshot-dependency-error-response
+assertions:
+  - Screenshot tool invocation fails cleanly when the required screenshot dependency is unavailable.
+  - The failure message clearly identifies the missing or unusable dependency category.
+  - The tool does not crash, hang, or report a misleading success result.
+  - No screenshot artifact is produced when the dependency is unavailable.

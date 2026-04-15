@@ -1,0 +1,28 @@
+id: capture-screenshot-unsupported-on-non-linux
+name: Screenshot tool is present but unsupported on non-Linux
+goal: Verify that the screenshot tool is advertised on a non-Linux host and returns a clear unsupported-platform error when invoked.
+preconditions:
+  - Host platform is not Linux.
+  - MCP server can be started locally for validation.
+steps:
+  - id: start-server
+    action: Start the MCP server.
+  - id: list-tools
+    action: Request the server tool list.
+  - id: verify-tool-present
+    action: Confirm the screenshot tool is advertised.
+  - id: invoke-screenshot
+    action: Invoke the screenshot tool with a whole-screen capture request.
+  - id: verify-error
+    action: Confirm the invocation fails with a clear unsupported-platform error.
+artifacts:
+  screenshots: []
+  recordings: []
+  logs:
+    - tool-list-response
+    - screenshot-tool-error-response
+assertions:
+  - Screenshot tool appears in the advertised tool list.
+  - Screenshot tool invocation fails on a non-Linux host.
+  - Failure message clearly states Linux is required or that the current platform is unsupported.
+  - No screenshot artifact is produced for the unsupported-platform request.
