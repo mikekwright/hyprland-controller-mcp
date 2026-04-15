@@ -1,0 +1,21 @@
+id: hyprland-session-smoke
+name: Hyprland Session Smoke Test
+goal: Confirm a validator can execute a basic session-level validation flow.
+preconditions:
+  - Running Hyprland session
+  - Reachable MCP server process
+steps:
+  - Start the MCP server through the approved runner entrypoint.
+  - Query session status using validator-safe commands.
+  - Capture at least one screenshot artifact.
+  - Produce a run manifest and report.
+artifacts:
+  screenshots:
+    - desktop-overview
+  recordings: []
+  logs:
+    - validator-run-log
+assertions:
+  - Session inspection returns a success status.
+  - Screenshot artifact exists.
+  - Report is written under scenarios/reports/.

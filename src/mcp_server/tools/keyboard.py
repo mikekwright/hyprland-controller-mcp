@@ -1,0 +1,1 @@
+"""Keyboard tool placeholder."""

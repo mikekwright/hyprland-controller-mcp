@@ -1,0 +1,73 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "manager",
+  "agent": {
+    "manager": {
+      "description": "Primary coordinator. Reads the repo, delegates work, and does not edit files directly.",
+      "mode": "primary",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": false
+      },
+      "permission": {
+        "task": {
+          "*": "deny",
+          "spec-builder": "allow",
+          "spec-implementor": "allow",
+          "scenario-validator": "allow"
+        }
+      },
+      "prompt": "Enforce the dark-factory workflow: manager -> spec-builder -> spec-implementor -> scenario-validator. Keep specs, implementation, and validation artifacts separated. Validation artifacts are not source code. Delegate work to the specialist agents and avoid making file changes directly. Require approval before moving from spec-building to implementation."
+    },
+    "spec-builder": {
+      "description": "Creates structured specs and implementation plans under specs/.",
+      "mode": "subagent",
+      "tools": {
+        "bash": false
+      },
+      "prompt": "Create and update structured specs under specs/. You may read project docs and source material needed to prepare specs, but do not modify implementation files. Do not read or write validation artifacts under scenarios/. Do not run validation."
+    },
+    "spec-implementor": {
+      "description": "Implements approved specs in project code.",
+      "mode": "subagent",
+      "prompt": "Implement approved specs in the project code. Treat specs/ as read-only reference material. Do not read from or write to scenarios/. Focus changes on source, tests, docs, scripts, and examples as needed."
+    },
+    "scenario-validator": {
+      "description": "Runs scenarios and stores validation artifacts without reading implementation code.",
+      "mode": "subagent",
+      "prompt": "Run scenarios and store validation artifacts under scenarios/. Operate only on runtime and validation inputs such as scenario files and validation scripts. Do not read or modify src/, tests/, or specs/. Validation artifacts are not source code."
+    }
+  },
+  "command": {
+    "spec:new": {
+      "description": "Create a new spec package",
+      "agent": "spec-builder",
+      "subtask": true,
+      "template": "Create a new spec package under specs/<feature-slug>/ using the project template files. Keep all output under specs/ and follow the dark-factory workflow."
+    },
+    "spec:approve": {
+      "description": "Mark a spec plan approved",
+      "agent": "manager",
+      "template": "Update specs/<feature-slug>/approval.md to mark a plan approved. Confirm the plan is ready to move from spec-builder to spec-implementor."
+    },
+    "impl:check": {
+      "description": "Run implementation checks",
+      "agent": "spec-implementor",
+      "subtask": true,
+      "template": "Run scripts/check.sh and summarize any failures, risks, or follow-up implementation work."
+    },
+    "server:run": {
+      "description": "Run the development server",
+      "agent": "scenario-validator",
+      "subtask": true,
+      "template": "Run scripts/run-server.sh and report the runtime status, relevant logs, and any validation blockers."
+    },
+    "scenario:validate": {
+      "description": "Run scenario validation",
+      "agent": "scenario-validator",
+      "subtask": true,
+      "template": "Run scripts/validate-scenario.sh <scenario-id> and store the resulting validation artifacts under scenarios/. Summarize the outcome without modifying implementation code."
+    }
+  }
+}

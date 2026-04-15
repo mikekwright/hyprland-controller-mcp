@@ -1,0 +1,1 @@
+"""ydotool adapter placeholder."""

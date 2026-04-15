@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "hyprland": {
+      "command": "./scripts/run-server.sh",
+      "args": []
+    }
+  }
+}

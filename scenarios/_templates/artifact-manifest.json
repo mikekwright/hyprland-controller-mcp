@@ -1,0 +1,11 @@
+{
+  "run_id": "example-run",
+  "scenario_id": "example-scenario",
+  "started_at": "2026-04-14T00:00:00Z",
+  "artifacts": {
+    "screenshots": [],
+    "recordings": [],
+    "logs": []
+  },
+  "result": "pending"
+}

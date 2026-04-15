@@ -1,0 +1,10 @@
+id: example-scenario
+name: Example Scenario
+goal: Validate a target behavior against a running Hyprland session.
+preconditions: []
+steps: []
+artifacts:
+  screenshots: []
+  recordings: []
+  logs: []
+assertions: []

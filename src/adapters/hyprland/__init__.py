@@ -1,0 +1,1 @@
+"""Hyprland adapter package placeholder."""

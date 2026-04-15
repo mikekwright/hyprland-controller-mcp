@@ -1,0 +1,1 @@
+"""slurp adapter placeholder."""
